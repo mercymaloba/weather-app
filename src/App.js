@@ -1,8 +1,30 @@
 import { IconButton, Paper, InputBase, Divider } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
+import {useCallback, useEffect } from "react";
 
-function App() {
+function App(city) {
+
+const apiKey = process.env.REACT_APP_API_KEY;
+ console.log('API Key:', apiKey);
+
+
+const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+
+
+const fetchData = useCallback((city) => {
+fetch(url)
+ .then(response=>response.json())
+ 
+ .then(data => console.log(data))
+ 
+ .catch(error=>console.log(error));
+}, [ url])
+useEffect(()=>{
+  fetchData(city);
+
+}, [fetchData, city]);
+
   return (
     <>
       <div>
@@ -17,8 +39,9 @@ function App() {
           placeholder="Enter city"
           inputProps={{ "aria-label": "enter city" }}
         />
-        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
-          <SearchIcon />
+        
+        <IconButton type="button" sx={{ p: "10px" }} aria-label="search"  onClick={fetchData}>
+          <SearchIcon/>
         </IconButton>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
       </Paper>
