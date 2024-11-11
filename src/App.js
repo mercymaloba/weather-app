@@ -15,21 +15,25 @@ function App() {
   
     
     const fetchData = async (city) => {
-      if (!city || !city.trim()) {
+      if (city===" ") {
         setError(new Error("Please enter a valid city name"));
         return;
       }
   
       setLoading(true);
       setError(null);
-      const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+      
       try {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${apiKey}`;
         const response = await fetch(url);
+        
+        const data = await response.json();
         if (!response.ok) {
-          throw new Error("Failed to fetch data");
+          throw new Error(data.message);
+          
         }
-        const result = await response.json();
-        setData(result);
+        console.log(data);
+        setData(data);
       } catch (error) {
         setError(error);
         setData(null);
@@ -40,7 +44,7 @@ function App() {
 
     useEffect(() => {
       
-    fetchData();
+    fetchData("mumbai");
   }, []);
 
   const handleSearch = (e) => {
@@ -71,8 +75,10 @@ function App() {
       {data && (
         <div>
           <h2>Weather in {data.name}</h2>
-          <p>Temperature: {Math.round(data.main.temp - 273.15)}°C</p>
+          <p>Weather: {data.weather[0].description}</p>
+          <p>Temperature: {Math.floor(data.main.temp)}°C</p>
           <p>Humidity: {data.main.humidity}%</p>
+          <p>Wind Speed: {data.wind.speed} m/s</p>
         </div>
       )}
 
@@ -80,7 +86,7 @@ function App() {
         component="form"
         sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
         onSubmit={(e) => {
-          e.preventDefault();
+          
           handleSearch();
         }}
       >
@@ -92,7 +98,7 @@ function App() {
           onChange={(e) => setCity(e.target.value)}
         />
 
-        <IconButton type="button" sx={{ p: "10px" }} aria-label="search">
+        <IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
           <SearchIcon />
         </IconButton>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
