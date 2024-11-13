@@ -41,6 +41,7 @@ const inputRef = useRef()
         setData(null);
       } finally {
         setLoading(false);
+        setCity("");
       }
     };
 
@@ -93,6 +94,11 @@ const inputRef = useRef()
           value={city}
           inputRef={inputRef}
           onChange={(e) => setCity(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter")
+                fetchData(inputRef.current.value);
+  
+            }}
         />
 
         <IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={()=>fetchData(inputRef.current.value)}>
