@@ -1,13 +1,15 @@
 import { IconButton, Paper, InputBase, Divider } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function App() {
   const [city, setCity] = useState("");
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+const inputRef = useRef()
 
   const apiKey = process.env.REACT_APP_API_KEY;
   console.log("API Key:", apiKey);
@@ -35,7 +37,7 @@ function App() {
         console.log(data);
         setData(data);
       } catch (error) {
-        setError(error);
+        setError(null);
         setData(null);
       } finally {
         setLoading(false);
@@ -47,10 +49,7 @@ function App() {
     fetchData("mumbai");
   }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    fetchData();
-  };
+ 
 
   // const fetchData = useCallback((city) => {
   // fetch(url)
@@ -84,21 +83,19 @@ function App() {
 
       <Paper
         component="form"
-        sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }}
-        onSubmit={(e) => {
-          
-          handleSearch();
-        }}
+        sx={{ p: "2px 4px", display: "flex", alignItems: "center", width: 400 }} onSubmit={(e) => e.preventDefault()}
+
       >
         <InputBase
           sx={{ ml: 1, flex: 1 }}
           placeholder="Enter city"
           inputProps={{ "aria-label": "enter city" }}
           value={city}
+          inputRef={inputRef}
           onChange={(e) => setCity(e.target.value)}
         />
 
-        <IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={handleSearch}>
+        <IconButton type="button" sx={{ p: "10px" }} aria-label="search" onClick={()=>fetchData(inputRef.current.value)}>
           <SearchIcon />
         </IconButton>
         <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
