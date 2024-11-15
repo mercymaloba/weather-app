@@ -1,4 +1,4 @@
-import { IconButton, Paper, InputBase, Card, Stack } from "@mui/material";
+import { IconButton, InputBase, Card, Stack } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import { useEffect, useRef, useState } from "react";
@@ -67,9 +67,22 @@ const inputRef = useRef()
   // }, [fetchData, city]);
 
   return (
-    <Stack sx={{flexDirection:'column', alignItems:'center', justifyContent:'center',background: 'linear-gradient(45deg, #FE6B 30%, #FF8E53 90%)', height:'100vh', width: '100vw'}}>
+    <Stack
+  sx={{
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundImage: `url(${process.env.PUBLIC_URL}/weather.jpg)`,
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    height: '100vh',
+    width: '100vw',
+    
+  }}
+>
       
-        <h1>Welcome to the Weather App!</h1>
+        <h1 style={{color: '#FFFFFF'}}>Welcome to the Weather App!</h1>
       
       {loading && <h2>Loading...</h2>}
       {error && <h2>Error: {error.message}</h2>}
